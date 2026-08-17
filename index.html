@@ -7,64 +7,54 @@
 
 <style>
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#f4f5f7;
+  background:#f3f4f6;
   color:#222;
 }
-.header{
+
+header{
   background:#8b2f16;
   color:#fff;
-  padding:20px 15px;
+  padding:18px 14px;
   text-align:center;
 }
-.header h1{margin:0;font-size:24px}
-.header p{margin:7px 0 0;font-size:14px}
+
+header h1{
+  margin:0;
+  font-size:23px;
+}
+
+header p{
+  margin:6px 0 0;
+  font-size:14px;
+}
 
 .container{
   max-width:900px;
   margin:auto;
-  padding:15px;
+  padding:14px;
 }
 
-.cards{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
 .card{
   background:#fff;
-  padding:16px;
   border-radius:12px;
+  padding:16px;
+  margin-bottom:14px;
   box-shadow:0 2px 8px #0001;
-}
-.card h3{
-  margin:0 0 8px;
-  font-size:14px;
-}
-.num{
-  font-size:23px;
-  font-weight:bold;
-  color:#8b2f16;
 }
 
-.section{
-  background:#fff;
-  margin-top:15px;
-  padding:18px;
-  border-radius:12px;
-  box-shadow:0 2px 8px #0001;
-}
-.section h2{
-  margin:0 0 15px;
-  font-size:20px;
+h2{
+  margin:0 0 14px;
+  font-size:19px;
 }
 
 label{
   display:block;
-  margin-top:10px;
   font-weight:bold;
+  margin-top:10px;
   font-size:14px;
 }
 
@@ -80,61 +70,103 @@ input,select{
 
 button{
   width:100%;
-  padding:13px;
   border:0;
   border-radius:8px;
-  background:#8b2f16;
+  padding:12px;
+  margin-top:10px;
+  font-size:15px;
   color:#fff;
-  font-size:16px;
-  margin-top:12px;
+  background:#8b2f16;
 }
 
-button.secondary{
+button.gray{
   background:#555;
 }
 
-button.danger{
+button.red{
   background:#c62828;
 }
 
-.account{
+button.green{
+  background:#16833b;
+}
+
+.dashboard{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.dash{
   background:#fff;
+  border-radius:10px;
+  padding:14px;
+  box-shadow:0 2px 8px #0001;
+}
+
+.dash-title{
+  font-size:13px;
+  color:#666;
+}
+
+.dash-number{
+  margin-top:6px;
+  font-size:22px;
+  font-weight:bold;
+  color:#8b2f16;
+}
+
+.account{
   border:1px solid #ddd;
   border-radius:10px;
   padding:14px;
   margin-top:10px;
+  background:#fff;
 }
 
-.account strong{
+.account-title{
   font-size:18px;
-}
-
-.account small{
-  color:#666;
-}
-
-.entry{
-  background:#fafafa;
-  border:1px solid #ddd;
-  border-radius:8px;
-  padding:12px;
-  margin-top:10px;
-}
-
-.hidden{display:none}
-
-.total{
-  margin-top:12px;
-  padding:12px;
-  background:#f1e4df;
-  border-radius:8px;
   font-weight:bold;
 }
 
-.footer{
-  text-align:center;
-  padding:25px;
+.account-info{
+  line-height:1.7;
+  margin-top:5px;
+  font-size:14px;
+}
+
+.entry{
+  background:#f8f8f8;
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:12px;
+  margin-top:9px;
+  line-height:1.7;
+}
+
+.total{
+  margin-top:10px;
+  background:#f0e0d9;
+  border-radius:8px;
+  padding:10px;
+  font-weight:bold;
+}
+
+.hidden{
+  display:none;
+}
+
+.empty{
   color:#777;
+  text-align:center;
+  padding:15px 5px;
+}
+
+footer{
+  text-align:center;
+  color:#777;
+  padding:25px;
   font-size:13px;
 }
 </style>
@@ -142,151 +174,303 @@ button.danger{
 
 <body>
 
-<div class="header">
+<header>
   <h1>🧱 ईंट भट्ठा Management System</h1>
-  <p>Labour Account & भट्ठा हिसाब</p>
-</div>
+  <p>Labour और Patla Account</p>
+</header>
 
 <div class="container">
 
-  <div class="cards">
+<!-- DASHBOARD -->
 
-    <div class="card">
-      <h3>👷 कुल Labour Account</h3>
-      <div class="num" id="totalAccounts">0</div>
-    </div>
+<div class="dashboard">
 
-    <div class="card">
-      <h3>📋 कुल Entries</h3>
-      <div class="num" id="totalEntries">0</div>
-    </div>
-
-    <div class="card">
-      <h3>🧱 कुल Quantity</h3>
-      <div class="num" id="totalQuantity">0</div>
-    </div>
-
-    <div class="card">
-      <h3>💰 कुल हिसाब</h3>
-      <div class="num" id="grandTotal">₹0</div>
-    </div>
-
+  <div class="dash">
+    <div class="dash-title">कुल Accounts</div>
+    <div class="dash-number" id="accountCount">0</div>
   </div>
 
-  <!-- NEW ACCOUNT -->
-
-  <div class="section">
-
-    <h2>👷 नया Labour Account</h2>
-
-    <label>Labour का नाम</label>
-    <input id="workerName" type="text" placeholder="नाम लिखें">
-
-    <label>Category</label>
-    <select id="category" onchange="updateSalaryTypes()">
-      <option value="">Category चुनें</option>
-      <option value="पथेरा">पथेरा</option>
-      <option value="ईंट उठाने वाली Labour">ईंट उठाने वाली Labour</option>
-      <option value="निकासी">निकासी</option>
-      <option value="भराई">भराई</option>
-      <option value="जलई">जलई</option>
-      <option value="अन्य">अन्य</option>
-    </select>
-
-    <label>Salary / Rate Type</label>
-    <select id="salaryType">
-      <option value="">पहले Category चुनें</option>
-    </select>
-
-    <label>Rate ₹</label>
-    <input id="rate" type="number" placeholder="Rate डालें">
-
-    <button onclick="createAccount()">➕ Labour Account बनाएं</button>
-
+  <div class="dash">
+    <div class="dash-title">कुल Entries</div>
+    <div class="dash-number" id="entryCount">0</div>
   </div>
 
-  <!-- ACCOUNTS -->
-
-  <div class="section">
-
-    <h2>📒 Labour Accounts</h2>
-
-    <div id="accounts">
-      अभी कोई Labour Account नहीं है।
-    </div>
-
+  <div class="dash">
+    <div class="dash-title">कुल Quantity</div>
+    <div class="dash-number" id="quantityCount">0</div>
   </div>
 
-  <!-- ENTRY -->
-
-  <div class="section hidden" id="entrySection">
-
-    <h2>➕ नई Entry</h2>
-
-    <div id="selectedAccount"></div>
-
-    <label>Date</label>
-    <input id="entryDate" type="date">
-
-    <label>Quantity / काम</label>
-    <input id="entryQuantity" type="number" placeholder="Quantity डालें">
-
-    <label>Rate ₹</label>
-    <input id="entryRate" type="number" placeholder="Rate">
-
-    <button onclick="addEntry()">💾 Entry Save करें</button>
-
-    <button class="secondary" onclick="closeEntry()">
-      वापस Accounts पर जाएं
-    </button>
-
+  <div class="dash">
+    <div class="dash-title">कुल हिसाब</div>
+    <div class="dash-number" id="amountCount">₹0</div>
   </div>
 
 </div>
 
-<div class="footer">
-  © 2026 ईंट भट्ठा Management System
+
+<!-- NEW ACCOUNT -->
+
+<div class="card">
+
+<h2>➕ नया Account</h2>
+
+<label>नाम</label>
+
+<input
+  id="name"
+  type="text"
+  placeholder="Labour का नाम">
+
+
+<label>Category</label>
+
+<select id="category" onchange="categoryChanged()">
+
+  <option value="">Category चुनें</option>
+
+  <option value="Patla">Patla</option>
+
+  <option value="ईंट उठाने वाली Labour">
+    ईंट उठाने वाली Labour
+  </option>
+
+  <option value="Nikasi">
+    Nikasi
+  </option>
+
+  <option value="Jalai">
+    Jalai
+  </option>
+
+  <option value="Bharai">
+    Bharai
+  </option>
+
+</select>
+
+
+<label>Salary / Rate Type</label>
+
+<select id="salaryType">
+
+  <option value="">
+    पहले Category चुनें
+  </option>
+
+</select>
+
+
+<label>Rate ₹</label>
+
+<input
+  id="accountRate"
+  type="number"
+  placeholder="Rate डालें">
+
+
+<button onclick="createAccount()">
+  Account बनाएं
+</button>
+
 </div>
+
+
+<!-- ACCOUNTS -->
+
+<div class="card">
+
+<h2>👷 Labour Accounts</h2>
+
+<div id="accounts"></div>
+
+</div>
+
+
+<!-- ENTRY -->
+
+<div class="card hidden" id="entryBox">
+
+<h2>➕ नई Entry</h2>
+
+<div id="entryAccountInfo"></div>
+
+
+<!-- PATLA ENTRY -->
+
+<div id="patlaFields" class="hidden">
+
+<label>Date</label>
+
+<input id="patlaDate" type="date">
+
+
+<label>काम का विवरण</label>
+
+<input
+  id="patlaWork"
+  type="text"
+  placeholder="काम का विवरण">
+
+
+<label>भट्ठा / Quantity</label>
+
+<input
+  id="patlaQuantity"
+  type="number"
+  placeholder="Quantity">
+
+
+<label>Rate ₹</label>
+
+<input
+  id="patlaRate"
+  type="number"
+  placeholder="Rate">
+
+</div>
+
+
+<!-- BRICK LABOUR ENTRY -->
+
+<div id="brickFields" class="hidden">
+
+<label>Date</label>
+
+<input id="brickDate" type="date">
+
+
+<label>Source / Patla</label>
+
+<select id="sourcePatla">
+
+  <option value="">
+    Patla चुनें
+  </option>
+
+</select>
+
+
+<label>Quantity</label>
+
+<input
+  id="brickQuantity"
+  type="number"
+  placeholder="Quantity">
+
+
+<label>Rate ₹</label>
+
+<input
+  id="brickRate"
+  type="number"
+  placeholder="Rate">
+
+</div>
+
+
+<!-- OTHER CATEGORY ENTRY -->
+
+<div id="otherFields" class="hidden">
+
+<label>Date</label>
+
+<input id="otherDate" type="date">
+
+
+<label>Quantity / काम</label>
+
+<input
+  id="otherQuantity"
+  type="number"
+  placeholder="Quantity">
+
+
+<label>Rate ₹</label>
+
+<input
+  id="otherRate"
+  type="number"
+  placeholder="Rate">
+
+</div>
+
+
+<button onclick="saveEntry()">
+  💾 Entry Save करें
+</button>
+
+<button
+  class="gray"
+  onclick="closeEntry()">
+
+  वापस Accounts पर जाएँ
+
+</button>
+
+</div>
+
+</div>
+
+
+<footer>
+© 2026 ईंट भट्ठा Management System
+</footer>
+
 
 <script>
 
 let accounts =
-JSON.parse(localStorage.getItem("bhattaAccounts")) || [];
+JSON.parse(localStorage.getItem("etBhattaAccounts")) || [];
 
-let selectedAccount = null;
+let selectedAccountId = null;
 
 
-/* SALARY TYPES */
+/* DATE */
 
-function updateSalaryTypes(){
+function today(){
+
+  return new Date()
+    .toISOString()
+    .split("T")[0];
+
+}
+
+
+/* CATEGORY CHANGE */
+
+function categoryChanged(){
 
   const category =
-  document.getElementById("category").value;
+    document.getElementById("category").value;
 
-  const select =
-  document.getElementById("salaryType");
+  const salary =
+    document.getElementById("salaryType");
 
-  select.innerHTML =
-  '<option value="">Salary Type चुनें</option>';
+  salary.innerHTML =
+    '<option value="">Salary Type चुनें</option>';
 
   if(!category) return;
 
-  const types = [
+
+  const options = [
+
     "प्रति हजार",
-    "प्रति मन",
-    "प्रति दिन",
-    "मासिक"
+
+    "प्रति मन"
+
   ];
 
-  types.forEach(type=>{
+
+  options.forEach(function(type){
 
     const option =
-    document.createElement("option");
+      document.createElement("option");
 
     option.value=type;
+
     option.textContent=type;
 
-    select.appendChild(option);
+    salary.appendChild(option);
 
   });
 
@@ -298,38 +482,55 @@ function updateSalaryTypes(){
 function createAccount(){
 
   const name =
-  document.getElementById("workerName").value.trim();
+    document.getElementById("name").value.trim();
 
   const category =
-  document.getElementById("category").value;
+    document.getElementById("category").value;
 
   const salaryType =
-  document.getElementById("salaryType").value;
+    document.getElementById("salaryType").value;
 
   const rate =
-  Number(document.getElementById("rate").value);
+    Number(document.getElementById("accountRate").value);
+
 
   if(!name){
-    alert("Labour का नाम डालें");
+
+    alert("नाम डालें");
+
     return;
+
   }
+
 
   if(!category){
+
     alert("Category चुनें");
+
     return;
+
   }
+
 
   if(!salaryType){
-    alert("Salary Type चुनें");
+
+    alert("Salary / Rate Type चुनें");
+
     return;
+
   }
+
 
   if(!rate){
+
     alert("Rate डालें");
+
     return;
+
   }
 
-  const account = {
+
+  const account={
 
     id:Date.now(),
 
@@ -345,19 +546,32 @@ function createAccount(){
 
   };
 
+
   accounts.push(account);
 
   saveData();
 
-  document.getElementById("workerName").value="";
+  clearAccountForm();
+
+  render();
+
+  alert("Account बन गया");
+
+}
+
+
+/* CLEAR FORM */
+
+function clearAccountForm(){
+
+  document.getElementById("name").value="";
+
   document.getElementById("category").value="";
+
   document.getElementById("salaryType").innerHTML =
-  '<option value="">पहले Category चुनें</option>';
-  document.getElementById("rate").value="";
+    '<option value="">पहले Category चुनें</option>';
 
-  renderAccounts();
-
-  alert("Labour Account बन गया");
+  document.getElementById("accountRate").value="";
 
 }
 
@@ -366,76 +580,280 @@ function createAccount(){
 
 function openAccount(id){
 
-  selectedAccount =
-  accounts.find(a=>a.id===id);
+  selectedAccountId=id;
 
-  if(!selectedAccount) return;
+  const account =
+    accounts.find(a=>a.id===id);
 
-  document.getElementById("entrySection")
-  .classList.remove("hidden");
+  if(!account) return;
 
-  document.getElementById("selectedAccount")
-  .innerHTML = `
-    <div class="account">
-      <strong>👷 ${selectedAccount.name}</strong><br>
-      Category: ${selectedAccount.category}<br>
-      Salary Type: ${selectedAccount.salaryType}<br>
-      Default Rate: ₹${selectedAccount.rate}
-    </div>
-  `;
 
-  document.getElementById("entryDate").value =
-  new Date().toISOString().split("T")[0];
+  document
+    .getElementById("entryBox")
+    .classList.remove("hidden");
 
-  document.getElementById("entryRate").value =
-  selectedAccount.rate;
 
-  window.scrollTo({
-    top:document.body.scrollHeight,
-    behavior:"smooth"
-  });
+  document.getElementById("entryAccountInfo")
+    .innerHTML=`
+
+      <div class="account">
+
+        <div class="account-title">
+          👷 ${account.name}
+        </div>
+
+        <div class="account-info">
+
+          Category:
+          <b>${account.category}</b>
+
+          <br>
+
+          Salary Type:
+          <b>${account.salaryType}</b>
+
+          <br>
+
+          Rate:
+          <b>₹${account.rate}</b>
+
+        </div>
+
+      </div>
+    `;
+
+
+  hideAllEntryFields();
+
+
+  if(account.category==="Patla"){
+
+    document
+      .getElementById("patlaFields")
+      .classList.remove("hidden");
+
+    document.getElementById("patlaDate").value=today();
+
+    document.getElementById("patlaRate").value=
+      account.rate;
+
+  }
+
+  else if(
+    account.category==="ईंट उठाने वाली Labour"
+  ){
+
+    document
+      .getElementById("brickFields")
+      .classList.remove("hidden");
+
+    document.getElementById("brickDate").value=today();
+
+    document.getElementById("brickRate").value=
+      account.rate;
+
+    loadPatlaList();
+
+  }
+
+  else{
+
+    document
+      .getElementById("otherFields")
+      .classList.remove("hidden");
+
+    document.getElementById("otherDate").value=today();
+
+    document.getElementById("otherRate").value=
+      account.rate;
+
+  }
+
+
+  document.getElementById("entryBox")
+    .scrollIntoView({
+      behavior:"smooth"
+    });
 
 }
 
 
-/* ADD ENTRY */
+/* HIDE ENTRY FIELDS */
 
-function addEntry(){
+function hideAllEntryFields(){
 
-  if(!selectedAccount) return;
+  document
+    .getElementById("patlaFields")
+    .classList.add("hidden");
 
-  const date =
-  document.getElementById("entryDate").value;
+  document
+    .getElementById("brickFields")
+    .classList.add("hidden");
 
-  const quantity =
-  Number(document.getElementById("entryQuantity").value);
+  document
+    .getElementById("otherFields")
+    .classList.add("hidden");
 
-  const rate =
-  Number(document.getElementById("entryRate").value);
+}
+
+
+/* PATLA LIST */
+
+function loadPatlaList(){
+
+  const select =
+    document.getElementById("sourcePatla");
+
+  select.innerHTML =
+    '<option value="">Patla चुनें</option>';
+
+
+  accounts
+    .filter(a=>a.category==="Patla")
+    .forEach(function(account){
+
+      const option =
+        document.createElement("option");
+
+      option.value=account.id;
+
+      option.textContent=account.name;
+
+      select.appendChild(option);
+
+    });
+
+}
+
+
+/* SAVE ENTRY */
+
+function saveEntry(){
+
+  const account =
+    accounts.find(
+      a=>a.id===selectedAccountId
+    );
+
+  if(!account) return;
+
+
+  let date="";
+  let work="";
+  let quantity=0;
+  let rate=0;
+  let source="";
+
+
+  if(account.category==="Patla"){
+
+    date=
+      document.getElementById("patlaDate").value;
+
+    work=
+      document.getElementById("patlaWork").value.trim();
+
+    quantity=
+      Number(
+        document.getElementById("patlaQuantity").value
+      );
+
+    rate=
+      Number(
+        document.getElementById("patlaRate").value
+      );
+
+  }
+
+  else if(
+    account.category==="ईंट उठाने वाली Labour"
+  ){
+
+    date=
+      document.getElementById("brickDate").value;
+
+    source=
+      document.getElementById("sourcePatla").value;
+
+    quantity=
+      Number(
+        document.getElementById("brickQuantity").value
+      );
+
+    rate=
+      Number(
+        document.getElementById("brickRate").value
+      );
+
+
+    if(!source){
+
+      alert("Source / Patla चुनें");
+
+      return;
+
+    }
+
+  }
+
+  else{
+
+    date=
+      document.getElementById("otherDate").value;
+
+    quantity=
+      Number(
+        document.getElementById("otherQuantity").value
+      );
+
+    rate=
+      Number(
+        document.getElementById("otherRate").value
+      );
+
+  }
+
 
   if(!date){
+
     alert("Date चुनें");
+
     return;
+
   }
+
 
   if(!quantity){
+
     alert("Quantity डालें");
+
     return;
+
   }
+
 
   if(!rate){
+
     alert("Rate डालें");
+
     return;
+
   }
 
-  const amount =
-  quantity * rate;
 
-  selectedAccount.entries.push({
+  const amount =
+    quantity * rate;
+
+
+  account.entries.push({
 
     id:Date.now(),
 
     date:date,
+
+    work:work,
+
+    source:source,
 
     quantity:quantity,
 
@@ -445,93 +863,79 @@ function addEntry(){
 
   });
 
+
   saveData();
 
-  document.getElementById("entryQuantity").value="";
+  clearEntryForm();
 
-  document.getElementById("entryRate").value =
-  selectedAccount.rate;
+  render();
 
-  renderAccounts();
-
-  showAccountEntries();
-
-  alert("Entry save हो गई");
+  alert("Entry Save हो गई");
 
 }
 
 
-/* SHOW ACCOUNT ENTRIES */
+/* CLEAR ENTRY */
 
-function showAccountEntries(){
+function clearEntryForm(){
 
-  if(!selectedAccount) return;
+  const ids=[
 
-  let html="";
+    "patlaWork",
+    "patlaQuantity",
+    "brickQuantity",
+    "otherQuantity"
 
-  if(selectedAccount.entries.length===0){
+  ];
 
-    html="<p>अभी कोई entry नहीं है।</p>";
 
-  }else{
+  ids.forEach(function(id){
 
-    selectedAccount.entries.forEach((e,index)=>{
+    const el=document.getElementById(id);
 
-      html += `
+    if(el) el.value="";
 
-      <div class="entry">
+  });
 
-        📅 ${e.date}<br>
+}
 
-        Quantity: <b>${e.quantity}</b><br>
 
-        Rate: ₹${e.rate}<br>
+/* CLOSE ENTRY */
 
-        <b>कुल: ₹${e.amount.toLocaleString("en-IN")}</b>
+function closeEntry(){
 
-        <button
-          class="danger"
-          onclick="deleteEntry(${e.id})">
-          🗑️ Entry Delete
-        </button>
+  selectedAccountId=null;
 
-      </div>
-
-      `;
-
-    });
-
-  }
-
-  const old =
-  document.getElementById("accountEntries");
-
-  if(old){
-    old.innerHTML=html;
-  }
+  document
+    .getElementById("entryBox")
+    .classList.add("hidden");
 
 }
 
 
 /* DELETE ENTRY */
 
-function deleteEntry(entryId){
+function deleteEntry(accountId,entryId){
 
-  if(!selectedAccount) return;
+  const account =
+    accounts.find(a=>a.id===accountId);
 
-  if(!confirm("क्या यह Entry delete करनी है?"))
-  return;
+  if(!account) return;
 
-  selectedAccount.entries =
-  selectedAccount.entries.filter(
-    e=>e.id!==entryId
-  );
+
+  if(!confirm("यह Entry delete करनी है?"))
+    return;
+
+
+  account.entries =
+    account.entries.filter(
+      e=>e.id!==entryId
+    );
+
 
   saveData();
 
-  renderAccounts();
-
-  showAccountEntries();
+  render();
 
 }
 
@@ -541,90 +945,210 @@ function deleteEntry(entryId){
 function deleteAccount(id){
 
   if(!confirm(
-    "क्या पूरा Labour Account delete करना है?"
-  )) return;
+    "पूरा Account और उसकी सभी Entries delete करनी हैं?"
+  ))
+    return;
+
 
   accounts =
-  accounts.filter(a=>a.id!==id);
+    accounts.filter(a=>a.id!==id);
+
 
   saveData();
 
-  renderAccounts();
+  closeEntry();
+
+  render();
+
+}
+
+
+/* ACCOUNT TOTAL */
+
+function accountTotal(account){
+
+  return account.entries.reduce(
+    (sum,e)=>sum+e.amount,
+    0
+  );
 
 }
 
 
 /* RENDER ACCOUNTS */
 
-function renderAccounts(){
+function render(){
 
   const box =
-  document.getElementById("accounts");
+    document.getElementById("accounts");
+
 
   if(accounts.length===0){
 
-    box.innerHTML =
-    "अभी कोई Labour Account नहीं है।";
+    box.innerHTML=
+      '<div class="empty">अभी कोई Account नहीं है।</div>';
 
-  }else{
+  }
+
+  else{
 
     box.innerHTML="";
 
-    accounts.forEach(account=>{
 
-      let total=0;
-      let quantity=0;
+    accounts.forEach(function(account){
 
-      account.entries.forEach(e=>{
-        total += e.amount;
-        quantity += e.quantity;
+      const total =
+        accountTotal(account);
+
+
+      let entriesHTML="";
+
+
+      account.entries.forEach(function(e){
+
+        let extra="";
+
+
+        if(account.category==="Patla"){
+
+          extra=
+            `<br>काम:
+             ${e.work || "-"}`;
+
+        }
+
+
+        if(
+          account.category===
+          "ईंट उठाने वाली Labour"
+        ){
+
+          let sourceName="-";
+
+          const sourceAccount =
+            accounts.find(
+              a=>a.id==e.source
+            );
+
+          if(sourceAccount)
+            sourceName=sourceAccount.name;
+
+
+          extra=
+            `<br>Source / Patla:
+             ${sourceName}`;
+
+        }
+
+
+        entriesHTML +=`
+
+          <div class="entry">
+
+            📅 ${e.date}
+
+            ${extra}
+
+            <br>
+
+            Quantity:
+            <b>${e.quantity}</b>
+
+            <br>
+
+            Rate:
+            ₹${e.rate}
+
+            <br>
+
+            <b>
+              Total:
+              ₹${e.amount.toLocaleString("en-IN")}
+            </b>
+
+            <button
+              class="red"
+              onclick="
+              deleteEntry(
+                ${account.id},
+                ${e.id}
+              )">
+
+              🗑️ Entry Delete
+
+            </button>
+
+          </div>
+
+        `;
+
       });
 
-      box.innerHTML += `
 
-      <div class="account">
+      box.innerHTML +=`
 
-        <strong>👷 ${account.name}</strong>
+        <div class="account">
 
-        <br>
+          <div class="account-title">
 
-        Category:
-        ${account.category}
+            👷 ${account.name}
 
-        <br>
+          </div>
 
-        Salary:
-        ${account.salaryType}
+          <div class="account-info">
 
-        <br>
+            Category:
+            <b>${account.category}</b>
 
-        Rate:
-        ₹${account.rate}
+            <br>
 
-        <br>
+            Salary Type:
+            <b>${account.salaryType}</b>
 
-        Quantity:
-        ${quantity}
+            <br>
 
-        <br>
+            Rate:
+            <b>₹${account.rate}</b>
 
-        <b>Total:
-        ₹${total.toLocaleString("en-IN")}</b>
+            <br>
 
-        <button
-          onclick="openAccount(${account.id})">
-          ➕ नई Entry
-        </button>
+            Entries:
+            <b>${account.entries.length}</b>
 
-        <button
-          class="danger"
-          onclick="deleteAccount(${account.id})">
-          🗑️ Account Delete
-        </button>
+          </div>
 
-        <div id="accountEntries"></div>
 
-      </div>
+          <div class="total">
+
+            Account Total:
+            ₹${total.toLocaleString("en-IN")}
+
+          </div>
+
+
+          <button
+            class="green"
+            onclick="
+            openAccount(${account.id})">
+
+            ➕ नई Entry
+
+          </button>
+
+
+          <button
+            class="red"
+            onclick="
+            deleteAccount(${account.id})">
+
+            🗑️ Account Delete
+
+          </button>
+
+
+          ${entriesHTML}
+
+        </div>
 
       `;
 
@@ -632,19 +1156,8 @@ function renderAccounts(){
 
   }
 
+
   updateDashboard();
-
-}
-
-
-/* CLOSE ENTRY */
-
-function closeEntry(){
-
-  document.getElementById("entrySection")
-  .classList.add("hidden");
-
-  selectedAccount=null;
 
 }
 
@@ -653,47 +1166,52 @@ function closeEntry(){
 
 function updateDashboard(){
 
-  let totalEntries=0;
-  let totalQuantity=0;
-  let grandTotal=0;
+  let entries=0;
+  let quantity=0;
+  let amount=0;
 
-  accounts.forEach(account=>{
 
-    account.entries.forEach(e=>{
+  accounts.forEach(function(account){
 
-      totalEntries++;
+    account.entries.forEach(function(e){
 
-      totalQuantity += e.quantity;
+      entries++;
 
-      grandTotal += e.amount;
+      quantity += Number(e.quantity);
+
+      amount += Number(e.amount);
 
     });
 
   });
 
-  document.getElementById("totalAccounts")
-  .innerText=accounts.length;
 
-  document.getElementById("totalEntries")
-  .innerText=totalEntries;
+  document.getElementById("accountCount")
+    .innerText=accounts.length;
 
-  document.getElementById("totalQuantity")
-  .innerText=
-  totalQuantity.toLocaleString("en-IN");
 
-  document.getElementById("grandTotal")
-  .innerText=
-  "₹"+grandTotal.toLocaleString("en-IN");
+  document.getElementById("entryCount")
+    .innerText=entries;
+
+
+  document.getElementById("quantityCount")
+    .innerText=
+      quantity.toLocaleString("en-IN");
+
+
+  document.getElementById("amountCount")
+    .innerText=
+      "₹"+amount.toLocaleString("en-IN");
 
 }
 
 
-/* SAVE */
+/* SAVE DATA */
 
 function saveData(){
 
   localStorage.setItem(
-    "bhattaAccounts",
+    "etBhattaAccounts",
     JSON.stringify(accounts)
   );
 
@@ -702,7 +1220,7 @@ function saveData(){
 
 /* START */
 
-renderAccounts();
+render();
 
 </script>
 
