@@ -1,1 +1,306 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ईंट भट्ठा Management System</title>
 
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f3f4f6;
+  color:#222;
+}
+.header{
+  background:#8b2f16;
+  color:white;
+  padding:20px 16px;
+  text-align:center;
+}
+.header h1{margin:0;font-size:24px}
+.header p{margin:7px 0 0;font-size:14px}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:15px;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+.card{
+  background:white;
+  padding:18px;
+  border-radius:12px;
+  box-shadow:0 2px 8px #0001;
+}
+.card h3{
+  margin:0 0 8px;
+  font-size:15px;
+}
+.number{
+  font-size:25px;
+  font-weight:bold;
+  color:#8b2f16;
+}
+
+.section{
+  background:white;
+  margin-top:15px;
+  padding:18px;
+  border-radius:12px;
+  box-shadow:0 2px 8px #0001;
+}
+.section h2{
+  margin-top:0;
+  font-size:20px;
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  margin:7px 0;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:15px;
+}
+
+button{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:8px;
+  background:#8b2f16;
+  color:white;
+  font-size:16px;
+  margin-top:8px;
+}
+
+.record{
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:12px;
+  margin-top:10px;
+  background:#fafafa;
+}
+
+.delete{
+  background:#c62828;
+  font-size:13px;
+  padding:8px;
+}
+
+.footer{
+  text-align:center;
+  padding:25px;
+  color:#777;
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>🧱 ईंट भट्ठा Management System</h1>
+  <p>भट्ठे का पूरा हिसाब एक जगह</p>
+</div>
+
+<div class="container">
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>👷 कुल मजदूर</h3>
+      <div class="number" id="totalWorkers">0</div>
+    </div>
+
+    <div class="card">
+      <h3>🧱 कुल ईंट</h3>
+      <div class="number" id="totalBricks">0</div>
+    </div>
+
+    <div class="card">
+      <h3>💰 कुल वेतन</h3>
+      <div class="number" id="totalSalary">₹0</div>
+    </div>
+
+    <div class="card">
+      <h3>📋 कुल Entries</h3>
+      <div class="number" id="totalEntries">0</div>
+    </div>
+
+  </div>
+
+  <div class="section">
+
+    <h2>👷 मजदूर की Entry</h2>
+
+    <input id="workerName" type="text" placeholder="मजदूर का नाम">
+
+    <select id="category">
+      <option value="">Category चुनें</option>
+      <option value="पथेरा">पथेरा</option>
+      <option value="भराई">भराई</option>
+      <option value="निकासी">निकासी</option>
+      <option value="ईंट उठाने वाला">ईंट उठाने वाला</option>
+      <option value="अन्य">अन्य</option>
+    </select>
+
+    <select id="salaryType">
+      <option value="">Salary Type चुनें</option>
+      <option value="प्रति हजार">प्रति हजार</option>
+      <option value="प्रति दिन">प्रति दिन</option>
+      <option value="मासिक">मासिक</option>
+    </select>
+
+    <input id="quantity" type="number" placeholder="Quantity / काम">
+
+    <input id="rate" type="number" placeholder="Rate ₹">
+
+    <button onclick="addEntry()">➕ Entry Save करें</button>
+
+  </div>
+
+  <div class="section">
+
+    <h2>📋 मजदूर Records</h2>
+
+    <div id="records">
+      अभी कोई entry नहीं है।
+    </div>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  © 2026 ईंट भट्ठा Management System
+</div>
+
+<script>
+
+let entries = JSON.parse(localStorage.getItem("bhattaEntries")) || [];
+
+function saveData(){
+  localStorage.setItem("bhattaEntries",JSON.stringify(entries));
+}
+
+function addEntry(){
+
+  const name=document.getElementById("workerName").value.trim();
+  const category=document.getElementById("category").value;
+  const salaryType=document.getElementById("salaryType").value;
+  const quantity=Number(document.getElementById("quantity").value);
+  const rate=Number(document.getElementById("rate").value);
+
+  if(!name || !category || !salaryType || !quantity || !rate){
+    alert("कृपया सभी जानकारी भरें");
+    return;
+  }
+
+  const salary=quantity*rate;
+
+  entries.push({
+    name,
+    category,
+    salaryType,
+    quantity,
+    rate,
+    salary
+  });
+
+  saveData();
+
+  document.getElementById("workerName").value="";
+  document.getElementById("category").value="";
+  document.getElementById("salaryType").value="";
+  document.getElementById("quantity").value="";
+  document.getElementById("rate").value="";
+
+  render();
+}
+
+function deleteEntry(index){
+
+  if(confirm("क्या आप यह entry हटाना चाहते हैं?")){
+    entries.splice(index,1);
+    saveData();
+    render();
+  }
+
+}
+
+function render(){
+
+  const records=document.getElementById("records");
+
+  if(entries.length===0){
+    records.innerHTML="अभी कोई entry नहीं है।";
+  }else{
+
+    records.innerHTML="";
+
+    entries.forEach((e,index)=>{
+
+      records.innerHTML+=`
+        <div class="record">
+
+          <b>👷 ${e.name}</b><br>
+
+          Category: ${e.category}<br>
+
+          Salary: ${e.salaryType}<br>
+
+          Quantity: ${e.quantity}<br>
+
+          Rate: ₹${e.rate}<br>
+
+          <b>कुल: ₹${e.salary}</b>
+
+          <button class="delete"
+          onclick="deleteEntry(${index})">
+          🗑️ Delete
+          </button>
+
+        </div>
+      `;
+
+    });
+
+  }
+
+  document.getElementById("totalWorkers").innerText=entries.length;
+
+  let totalSalary=0;
+  let totalBricks=0;
+
+  entries.forEach(e=>{
+    totalSalary+=e.salary;
+
+    if(e.salaryType==="प्रति हजार"){
+      totalBricks+=e.quantity*1000;
+    }
+  });
+
+  document.getElementById("totalSalary").innerText=
+    "₹"+totalSalary.toLocaleString("en-IN");
+
+  document.getElementById("totalBricks").innerText=
+    totalBricks.toLocaleString("en-IN");
+
+  document.getElementById("totalEntries").innerText=
+    entries.length;
+}
+
+render();
+
+</script>
+
+</body>
+</html>
