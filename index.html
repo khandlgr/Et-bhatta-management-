@@ -10,13 +10,13 @@
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#f3f4f6;
+  background:#f4f5f7;
   color:#222;
 }
 .header{
   background:#8b2f16;
-  color:white;
-  padding:20px 16px;
+  color:#fff;
+  padding:20px 15px;
   text-align:center;
 }
 .header h1{margin:0;font-size:24px}
@@ -31,43 +31,51 @@ body{
 .cards{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:12px;
+  gap:10px;
 }
 .card{
-  background:white;
-  padding:18px;
+  background:#fff;
+  padding:16px;
   border-radius:12px;
   box-shadow:0 2px 8px #0001;
 }
 .card h3{
   margin:0 0 8px;
-  font-size:15px;
+  font-size:14px;
 }
-.number{
-  font-size:25px;
+.num{
+  font-size:23px;
   font-weight:bold;
   color:#8b2f16;
 }
 
 .section{
-  background:white;
+  background:#fff;
   margin-top:15px;
   padding:18px;
   border-radius:12px;
   box-shadow:0 2px 8px #0001;
 }
 .section h2{
-  margin-top:0;
+  margin:0 0 15px;
   font-size:20px;
+}
+
+label{
+  display:block;
+  margin-top:10px;
+  font-weight:bold;
+  font-size:14px;
 }
 
 input,select{
   width:100%;
   padding:12px;
-  margin:7px 0;
+  margin-top:5px;
   border:1px solid #ccc;
   border-radius:8px;
   font-size:15px;
+  background:#fff;
 }
 
 button{
@@ -76,23 +84,51 @@ button{
   border:0;
   border-radius:8px;
   background:#8b2f16;
-  color:white;
+  color:#fff;
   font-size:16px;
-  margin-top:8px;
+  margin-top:12px;
 }
 
-.record{
+button.secondary{
+  background:#555;
+}
+
+button.danger{
+  background:#c62828;
+}
+
+.account{
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:14px;
+  margin-top:10px;
+}
+
+.account strong{
+  font-size:18px;
+}
+
+.account small{
+  color:#666;
+}
+
+.entry{
+  background:#fafafa;
   border:1px solid #ddd;
   border-radius:8px;
   padding:12px;
   margin-top:10px;
-  background:#fafafa;
 }
 
-.delete{
-  background:#c62828;
-  font-size:13px;
-  padding:8px;
+.hidden{display:none}
+
+.total{
+  margin-top:12px;
+  padding:12px;
+  background:#f1e4df;
+  border-radius:8px;
+  font-weight:bold;
 }
 
 .footer{
@@ -108,7 +144,7 @@ button{
 
 <div class="header">
   <h1>🧱 ईंट भट्ठा Management System</h1>
-  <p>भट्ठे का पूरा हिसाब एक जगह</p>
+  <p>Labour Account & भट्ठा हिसाब</p>
 </div>
 
 <div class="container">
@@ -116,64 +152,93 @@ button{
   <div class="cards">
 
     <div class="card">
-      <h3>👷 कुल मजदूर</h3>
-      <div class="number" id="totalWorkers">0</div>
-    </div>
-
-    <div class="card">
-      <h3>🧱 कुल ईंट</h3>
-      <div class="number" id="totalBricks">0</div>
-    </div>
-
-    <div class="card">
-      <h3>💰 कुल वेतन</h3>
-      <div class="number" id="totalSalary">₹0</div>
+      <h3>👷 कुल Labour Account</h3>
+      <div class="num" id="totalAccounts">0</div>
     </div>
 
     <div class="card">
       <h3>📋 कुल Entries</h3>
-      <div class="number" id="totalEntries">0</div>
+      <div class="num" id="totalEntries">0</div>
+    </div>
+
+    <div class="card">
+      <h3>🧱 कुल Quantity</h3>
+      <div class="num" id="totalQuantity">0</div>
+    </div>
+
+    <div class="card">
+      <h3>💰 कुल हिसाब</h3>
+      <div class="num" id="grandTotal">₹0</div>
     </div>
 
   </div>
 
+  <!-- NEW ACCOUNT -->
+
   <div class="section">
 
-    <h2>👷 मजदूर की Entry</h2>
+    <h2>👷 नया Labour Account</h2>
 
-    <input id="workerName" type="text" placeholder="मजदूर का नाम">
+    <label>Labour का नाम</label>
+    <input id="workerName" type="text" placeholder="नाम लिखें">
 
-    <select id="category">
+    <label>Category</label>
+    <select id="category" onchange="updateSalaryTypes()">
       <option value="">Category चुनें</option>
       <option value="पथेरा">पथेरा</option>
-      <option value="भराई">भराई</option>
+      <option value="ईंट उठाने वाली Labour">ईंट उठाने वाली Labour</option>
       <option value="निकासी">निकासी</option>
-      <option value="ईंट उठाने वाला">ईंट उठाने वाला</option>
+      <option value="भराई">भराई</option>
+      <option value="जलई">जलई</option>
       <option value="अन्य">अन्य</option>
     </select>
 
+    <label>Salary / Rate Type</label>
     <select id="salaryType">
-      <option value="">Salary Type चुनें</option>
-      <option value="प्रति हजार">प्रति हजार</option>
-      <option value="प्रति दिन">प्रति दिन</option>
-      <option value="मासिक">मासिक</option>
+      <option value="">पहले Category चुनें</option>
     </select>
 
-    <input id="quantity" type="number" placeholder="Quantity / काम">
+    <label>Rate ₹</label>
+    <input id="rate" type="number" placeholder="Rate डालें">
 
-    <input id="rate" type="number" placeholder="Rate ₹">
-
-    <button onclick="addEntry()">➕ Entry Save करें</button>
+    <button onclick="createAccount()">➕ Labour Account बनाएं</button>
 
   </div>
 
+  <!-- ACCOUNTS -->
+
   <div class="section">
 
-    <h2>📋 मजदूर Records</h2>
+    <h2>📒 Labour Accounts</h2>
 
-    <div id="records">
-      अभी कोई entry नहीं है।
+    <div id="accounts">
+      अभी कोई Labour Account नहीं है।
     </div>
+
+  </div>
+
+  <!-- ENTRY -->
+
+  <div class="section hidden" id="entrySection">
+
+    <h2>➕ नई Entry</h2>
+
+    <div id="selectedAccount"></div>
+
+    <label>Date</label>
+    <input id="entryDate" type="date">
+
+    <label>Quantity / काम</label>
+    <input id="entryQuantity" type="number" placeholder="Quantity डालें">
+
+    <label>Rate ₹</label>
+    <input id="entryRate" type="number" placeholder="Rate">
+
+    <button onclick="addEntry()">💾 Entry Save करें</button>
+
+    <button class="secondary" onclick="closeEntry()">
+      वापस Accounts पर जाएं
+    </button>
 
   </div>
 
@@ -185,120 +250,459 @@ button{
 
 <script>
 
-let entries = JSON.parse(localStorage.getItem("bhattaEntries")) || [];
+let accounts =
+JSON.parse(localStorage.getItem("bhattaAccounts")) || [];
 
-function saveData(){
-  localStorage.setItem("bhattaEntries",JSON.stringify(entries));
+let selectedAccount = null;
+
+
+/* SALARY TYPES */
+
+function updateSalaryTypes(){
+
+  const category =
+  document.getElementById("category").value;
+
+  const select =
+  document.getElementById("salaryType");
+
+  select.innerHTML =
+  '<option value="">Salary Type चुनें</option>';
+
+  if(!category) return;
+
+  const types = [
+    "प्रति हजार",
+    "प्रति मन",
+    "प्रति दिन",
+    "मासिक"
+  ];
+
+  types.forEach(type=>{
+
+    const option =
+    document.createElement("option");
+
+    option.value=type;
+    option.textContent=type;
+
+    select.appendChild(option);
+
+  });
+
 }
 
-function addEntry(){
 
-  const name=document.getElementById("workerName").value.trim();
-  const category=document.getElementById("category").value;
-  const salaryType=document.getElementById("salaryType").value;
-  const quantity=Number(document.getElementById("quantity").value);
-  const rate=Number(document.getElementById("rate").value);
+/* CREATE ACCOUNT */
 
-  if(!name || !category || !salaryType || !quantity || !rate){
-    alert("कृपया सभी जानकारी भरें");
+function createAccount(){
+
+  const name =
+  document.getElementById("workerName").value.trim();
+
+  const category =
+  document.getElementById("category").value;
+
+  const salaryType =
+  document.getElementById("salaryType").value;
+
+  const rate =
+  Number(document.getElementById("rate").value);
+
+  if(!name){
+    alert("Labour का नाम डालें");
     return;
   }
 
-  const salary=quantity*rate;
+  if(!category){
+    alert("Category चुनें");
+    return;
+  }
 
-  entries.push({
-    name,
-    category,
-    salaryType,
-    quantity,
-    rate,
-    salary
-  });
+  if(!salaryType){
+    alert("Salary Type चुनें");
+    return;
+  }
+
+  if(!rate){
+    alert("Rate डालें");
+    return;
+  }
+
+  const account = {
+
+    id:Date.now(),
+
+    name:name,
+
+    category:category,
+
+    salaryType:salaryType,
+
+    rate:rate,
+
+    entries:[]
+
+  };
+
+  accounts.push(account);
 
   saveData();
 
   document.getElementById("workerName").value="";
   document.getElementById("category").value="";
-  document.getElementById("salaryType").value="";
-  document.getElementById("quantity").value="";
+  document.getElementById("salaryType").innerHTML =
+  '<option value="">पहले Category चुनें</option>';
   document.getElementById("rate").value="";
 
-  render();
+  renderAccounts();
+
+  alert("Labour Account बन गया");
+
 }
 
-function deleteEntry(index){
 
-  if(confirm("क्या आप यह entry हटाना चाहते हैं?")){
-    entries.splice(index,1);
-    saveData();
-    render();
+/* OPEN ACCOUNT */
+
+function openAccount(id){
+
+  selectedAccount =
+  accounts.find(a=>a.id===id);
+
+  if(!selectedAccount) return;
+
+  document.getElementById("entrySection")
+  .classList.remove("hidden");
+
+  document.getElementById("selectedAccount")
+  .innerHTML = `
+    <div class="account">
+      <strong>👷 ${selectedAccount.name}</strong><br>
+      Category: ${selectedAccount.category}<br>
+      Salary Type: ${selectedAccount.salaryType}<br>
+      Default Rate: ₹${selectedAccount.rate}
+    </div>
+  `;
+
+  document.getElementById("entryDate").value =
+  new Date().toISOString().split("T")[0];
+
+  document.getElementById("entryRate").value =
+  selectedAccount.rate;
+
+  window.scrollTo({
+    top:document.body.scrollHeight,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* ADD ENTRY */
+
+function addEntry(){
+
+  if(!selectedAccount) return;
+
+  const date =
+  document.getElementById("entryDate").value;
+
+  const quantity =
+  Number(document.getElementById("entryQuantity").value);
+
+  const rate =
+  Number(document.getElementById("entryRate").value);
+
+  if(!date){
+    alert("Date चुनें");
+    return;
   }
 
+  if(!quantity){
+    alert("Quantity डालें");
+    return;
+  }
+
+  if(!rate){
+    alert("Rate डालें");
+    return;
+  }
+
+  const amount =
+  quantity * rate;
+
+  selectedAccount.entries.push({
+
+    id:Date.now(),
+
+    date:date,
+
+    quantity:quantity,
+
+    rate:rate,
+
+    amount:amount
+
+  });
+
+  saveData();
+
+  document.getElementById("entryQuantity").value="";
+
+  document.getElementById("entryRate").value =
+  selectedAccount.rate;
+
+  renderAccounts();
+
+  showAccountEntries();
+
+  alert("Entry save हो गई");
+
 }
 
-function render(){
 
-  const records=document.getElementById("records");
+/* SHOW ACCOUNT ENTRIES */
 
-  if(entries.length===0){
-    records.innerHTML="अभी कोई entry नहीं है।";
+function showAccountEntries(){
+
+  if(!selectedAccount) return;
+
+  let html="";
+
+  if(selectedAccount.entries.length===0){
+
+    html="<p>अभी कोई entry नहीं है।</p>";
+
   }else{
 
-    records.innerHTML="";
+    selectedAccount.entries.forEach((e,index)=>{
 
-    entries.forEach((e,index)=>{
+      html += `
 
-      records.innerHTML+=`
-        <div class="record">
+      <div class="entry">
 
-          <b>👷 ${e.name}</b><br>
+        📅 ${e.date}<br>
 
-          Category: ${e.category}<br>
+        Quantity: <b>${e.quantity}</b><br>
 
-          Salary: ${e.salaryType}<br>
+        Rate: ₹${e.rate}<br>
 
-          Quantity: ${e.quantity}<br>
+        <b>कुल: ₹${e.amount.toLocaleString("en-IN")}</b>
 
-          Rate: ₹${e.rate}<br>
+        <button
+          class="danger"
+          onclick="deleteEntry(${e.id})">
+          🗑️ Entry Delete
+        </button>
 
-          <b>कुल: ₹${e.salary}</b>
+      </div>
 
-          <button class="delete"
-          onclick="deleteEntry(${index})">
-          🗑️ Delete
-          </button>
-
-        </div>
       `;
 
     });
 
   }
 
-  document.getElementById("totalWorkers").innerText=entries.length;
+  const old =
+  document.getElementById("accountEntries");
 
-  let totalSalary=0;
-  let totalBricks=0;
+  if(old){
+    old.innerHTML=html;
+  }
 
-  entries.forEach(e=>{
-    totalSalary+=e.salary;
-
-    if(e.salaryType==="प्रति हजार"){
-      totalBricks+=e.quantity*1000;
-    }
-  });
-
-  document.getElementById("totalSalary").innerText=
-    "₹"+totalSalary.toLocaleString("en-IN");
-
-  document.getElementById("totalBricks").innerText=
-    totalBricks.toLocaleString("en-IN");
-
-  document.getElementById("totalEntries").innerText=
-    entries.length;
 }
 
-render();
+
+/* DELETE ENTRY */
+
+function deleteEntry(entryId){
+
+  if(!selectedAccount) return;
+
+  if(!confirm("क्या यह Entry delete करनी है?"))
+  return;
+
+  selectedAccount.entries =
+  selectedAccount.entries.filter(
+    e=>e.id!==entryId
+  );
+
+  saveData();
+
+  renderAccounts();
+
+  showAccountEntries();
+
+}
+
+
+/* DELETE ACCOUNT */
+
+function deleteAccount(id){
+
+  if(!confirm(
+    "क्या पूरा Labour Account delete करना है?"
+  )) return;
+
+  accounts =
+  accounts.filter(a=>a.id!==id);
+
+  saveData();
+
+  renderAccounts();
+
+}
+
+
+/* RENDER ACCOUNTS */
+
+function renderAccounts(){
+
+  const box =
+  document.getElementById("accounts");
+
+  if(accounts.length===0){
+
+    box.innerHTML =
+    "अभी कोई Labour Account नहीं है।";
+
+  }else{
+
+    box.innerHTML="";
+
+    accounts.forEach(account=>{
+
+      let total=0;
+      let quantity=0;
+
+      account.entries.forEach(e=>{
+        total += e.amount;
+        quantity += e.quantity;
+      });
+
+      box.innerHTML += `
+
+      <div class="account">
+
+        <strong>👷 ${account.name}</strong>
+
+        <br>
+
+        Category:
+        ${account.category}
+
+        <br>
+
+        Salary:
+        ${account.salaryType}
+
+        <br>
+
+        Rate:
+        ₹${account.rate}
+
+        <br>
+
+        Quantity:
+        ${quantity}
+
+        <br>
+
+        <b>Total:
+        ₹${total.toLocaleString("en-IN")}</b>
+
+        <button
+          onclick="openAccount(${account.id})">
+          ➕ नई Entry
+        </button>
+
+        <button
+          class="danger"
+          onclick="deleteAccount(${account.id})">
+          🗑️ Account Delete
+        </button>
+
+        <div id="accountEntries"></div>
+
+      </div>
+
+      `;
+
+    });
+
+  }
+
+  updateDashboard();
+
+}
+
+
+/* CLOSE ENTRY */
+
+function closeEntry(){
+
+  document.getElementById("entrySection")
+  .classList.add("hidden");
+
+  selectedAccount=null;
+
+}
+
+
+/* DASHBOARD */
+
+function updateDashboard(){
+
+  let totalEntries=0;
+  let totalQuantity=0;
+  let grandTotal=0;
+
+  accounts.forEach(account=>{
+
+    account.entries.forEach(e=>{
+
+      totalEntries++;
+
+      totalQuantity += e.quantity;
+
+      grandTotal += e.amount;
+
+    });
+
+  });
+
+  document.getElementById("totalAccounts")
+  .innerText=accounts.length;
+
+  document.getElementById("totalEntries")
+  .innerText=totalEntries;
+
+  document.getElementById("totalQuantity")
+  .innerText=
+  totalQuantity.toLocaleString("en-IN");
+
+  document.getElementById("grandTotal")
+  .innerText=
+  "₹"+grandTotal.toLocaleString("en-IN");
+
+}
+
+
+/* SAVE */
+
+function saveData(){
+
+  localStorage.setItem(
+    "bhattaAccounts",
+    JSON.stringify(accounts)
+  );
+
+}
+
+
+/* START */
+
+renderAccounts();
 
 </script>
 
